@@ -1,0 +1,10 @@
+<?
+
+$config = array(
+  'requires'=>array(
+    'string',
+    'sass',
+    'class_lazyloader',
+    'php_sandbox',
+  ),
+);

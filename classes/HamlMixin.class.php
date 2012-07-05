@@ -15,9 +15,9 @@ class HamlMixin extends Mixin
   {
   
     if(!file_exists($path)) W::error("File $path does not exist for HAMLfication.");
-    $unique_name = folderize(ftov($path));
+    $unique_name = W::folderize(W::ftov($path));
     $php_path = self::$module['cache_fpath']."/$unique_name.php";
-    if (is_newer($path, $php_path))
+    if (W::is_newer($path, $php_path))
     {
       self::to_php($path, $php_path);
     }
@@ -30,12 +30,12 @@ class HamlMixin extends Mixin
   static function to_php($src)
   {
     global $__wicked;
-    if(endswith($src, '.php')) return $src;
+    if(W::endswith($src, '.php')) return $src;
       
-    $unique_name = folderize(ftov($src));
+    $unique_name = W::folderize(W::ftov($src));
     $dst = self::$module['cache_fpath']."/$unique_name.php";
-    ensure_writable_folder(dirname($dst));
-    if ($__wicked['modules']['haml']['always_generate'] == false && !is_newer($src, $dst)) return $dst;
+    W::ensure_writable_folder(dirname($dst));
+    if ($__wicked['modules']['haml']['always_generate'] == false && !W::is_newer($src, $dst)) return $dst;
   
     $lex = new HamlLexer();
     $lex->N = 0;
@@ -56,7 +56,7 @@ class HamlMixin extends Mixin
   
   static function generate_lexer()
   {
-    if (is_newer($parser_src,$parser_dst))
+    if (W::is_newer($parser_src,$parser_dst))
     {
       require_once 'LexerGenerator.php';
       ob_start();

@@ -14,7 +14,7 @@ class HamlLexer {
   var $php_wrap=false;
   var $is_sass_mode = false;
   var $css_classes = array();
-
+  
   function render_to_string()
   {
     $this->data = preg_replace("/\r/", "", $this->data);
@@ -299,7 +299,7 @@ class HamlLexer {
   function handle_attribute_assign($matches)
   {
     $name = array_shift($matches);
-    echo " $name=\"<?= h(";
+    echo " $name=\"<?= W::h(";
     $this->yybegin(self::ATTRIBUTE_VALUE_TOKEN);
     $this->attribute_value_expecting = array('php');
   }
@@ -487,10 +487,12 @@ class HamlLexer {
   {
     $sass = join($this->sass_lines, "\n");
     $md5 = md5($sass);
-    $fname = HAML_CACHE_FPATH."/$md5.sass";
+    $haml_config = W::module('haml');
+    $sass_config = W::module('sass');
+    $fname = $haml_config['cache_fpath']."/$md5.sass";
     file_put_contents($fname, $sass);
     $renderer = SassRenderer::EXPANDED;
-    $parser = new SassParser(dirname($fname), SASS_CACHE_FPATH , $renderer);
+    $parser = new SassParser(dirname($fname), $sass_config['cache_fpath'] , $renderer);
     $css = $parser->fetch($fname, $renderer);
     $lines = explode("\n",$css);
     echo "\n";
@@ -554,7 +556,7 @@ class HamlLexer {
       if ($use_echo)
       {
         echo "<?= ";
-        if ($this->php_wrap) echo "h(";
+        if ($this->php_wrap) echo "W::h(";
       } else {
         echo "<? ";
       }

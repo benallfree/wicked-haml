@@ -7,5 +7,7 @@ $config = array(
     'class_lazyloader',
     'php_sandbox',
     'path_utils',
+    'presentation',
   ),
+  'always_generate'=>false,
 );

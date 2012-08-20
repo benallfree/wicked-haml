@@ -29,13 +29,14 @@ class HamlMixin extends Mixin
   
   static function to_php($src)
   {
-    global $__wicked;
+    $config = W::module('haml');
     if(W::endswith($src, '.php')) return $src;
       
     $unique_name = W::folderize(W::ftov($src));
     $dst = self::$module['cache_fpath']."/$unique_name.php";
     W::ensure_writable_folder(dirname($dst));
-    if ($__wicked['modules']['haml']['always_generate'] == false && !W::is_newer($src, $dst)) return $dst;
+
+    if ($config['always_generate'] == false && !W::is_newer($src, $dst)) return $dst;
   
     $lex = new HamlLexer();
     $lex->N = 0;
